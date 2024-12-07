@@ -8,12 +8,16 @@ generator client {
 }
 
 model Item {
-  id       Int     @id @default(autoincrement())
-  name     String?
-  type     String?
-  price    String?
-  duration String?
-  status   String?
+  id          Int      @id @default(autoincrement())
+  name        String?
+  description String?
+  type        String?
+  itemType    String?
+  price       Float?
+  duration    Float?
+  status      String?
+  deleted     Boolean  @default(false)
+  createdAt   DateTime @default(now())
 }
 
 model Waiters {
@@ -25,6 +29,7 @@ model Waiters {
   email       String?  @unique
   password    String?
   phoneNumber String?
+  deleted     Boolean  @default(false)
   createdAt   DateTime @default(now())
 }
 

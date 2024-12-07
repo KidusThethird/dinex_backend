@@ -12,33 +12,69 @@ const prisma = new PrismaClient();
 
 //Get all student
 router.get("/", async (req, res, next) => {
-  console.log("Get Waiters requested:")
+ 
   try {
-    const Waiters = await prisma.Waiters.findMany({
+    const Item = await prisma.Item.findMany({
       where: {
         deleted: false,  // Filter where 'deleted' is false
       },
       orderBy: {
-        firstName: "asc",  // Order by first name in ascending order
+        name: "asc",  // Order by first name in ascending order
       },
     });
-    res.json(Waiters);
+    res.json(Item);
   } catch (error) {
     next(error);
   }
 });
+
+router.get("/getfoods", async (req, res, next) => {
+
+    try {
+      const Item = await prisma.Item.findMany({
+        where: {
+          deleted: false,
+          itemType: "food"  // Filter where 'deleted' is false
+        },
+        orderBy: {
+          name: "asc",  // Order by first name in ascending order
+        },
+      });
+      res.json(Item);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.get("/getdrinks", async (req, res, next) => {
+   
+    try {
+      const Item = await prisma.Item.findMany({
+        where: {
+          deleted: false,
+          itemType: "drink"  // Filter where 'deleted' is false
+        },
+        orderBy: {
+          name: "asc",  // Order by first name in ascending order
+        },
+      });
+      res.json(Item);
+    } catch (error) {
+      next(error);
+    }
+  });
 
 //Get one student
 router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params.id;
    // console.log("rec: " + req.params.id);
-    const Waiters = await prisma.Waiters.findUnique({
+    const Item = await prisma.Item.findUnique({
       where: {
         id: parseInt(req.params.id),
       },
     });
-    res.json(Waiters);
+    res.json(Item);
   } catch (error) {
     console.log("error form catch: " + error);
     next(error);
@@ -49,10 +85,10 @@ router.get("/:id", async (req, res, next) => {
 router.post("/",  async (req, res, next) => {
   console.log("Req: " + JSON.stringify(req.body));
   try {
-    const Waiters = await prisma.Waiters.create({
+    const Item = await prisma.Item.create({
       data: req.body,
     });
-    res.json(Waiters);
+    res.json(Item);
   } catch (error) {
     res.json({"message":"failed"});
     console.log("Error from catch: " + error);
@@ -65,13 +101,13 @@ router.patch("/:id",  async (req, res, next) => {
    
       try {
         const { id } = req.params;
-        const Waiters = await prisma.Waiters.update({
+        const Item = await prisma.Item.update({
           where: {
             id: parseInt(req.params.id),
           },
           data: req.body,
         });
-        res.json(Waiters);
+        res.json(Item);
       } catch (error) {
         next(error);
       }
@@ -85,13 +121,13 @@ router.delete("/:id",  async (req, res, next) => {
     
       try {
         const { id } = req.params;
-        Waiters = await prisma.Waiters.delete({
+        Item = await prisma.Item.delete({
           where: {
             id: parseInt(req.params.id),
           },
         });
 
-        res.json(Waiters);
+        res.json(Item);
       } catch (error) {
         next(error);
       }
