@@ -1,0 +1,65 @@
+GET http://localhost:5000/waiters
+
+
+###
+
+POST http://localhost:5000/waiters
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "type": "Full Time",
+  "status": "active",
+  "email": "john.doe@example.com",
+  "password": "masterkid",
+  "phoneNumber": "1234567890"
+}
+
+###
+
+
+POST http://localhost:5000/waiters/login
+Content-Type: application/json
+
+{
+  
+  "email": "john.doe@example.com",
+  "password": "masterkid"
+ 
+}
+
+
+### 
+
+POST http://localhost:5000/login_waiter/login
+Content-Type: application/json
+
+{
+     "email": "fantu@gmail.com",
+  "password": "masterkid"
+}
+
+###
+
+GET http://localhost:5000/login_waiter/profile
+Authorization: Barer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzMzNzE3MzY1fQ.tw4ASLhSroxWg2If4hfm8TdJb5FrwOn0SMalKzIjenU
+
+### 
+
+POST http://localhost:5000/orderitem
+Content-Type: application/json
+
+{
+  "WaiterId": 1,
+  "OrderItems": [
+    {
+      "ItemId": 1,
+      "quantity": 2
+    },
+    {
+      "ItemId": 1,
+      "quantity": 1
+    }
+  ]
+}

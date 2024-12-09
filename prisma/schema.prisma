@@ -8,7 +8,7 @@ generator client {
 }
 
 model Item {
-  id          Int      @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   name        String?
   description String?
   type        String?
@@ -16,27 +16,55 @@ model Item {
   price       Float?
   duration    Float?
   status      String?
-  deleted     Boolean  @default(false)
-  createdAt   DateTime @default(now())
+  deleted     Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  OrderItems  OrderItem[]
 }
 
 model Waiters {
-  id          Int      @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   firstName   String?
   lastName    String?
   type        String?
-  status      String?  @default("down")
-  email       String?  @unique
+  status      String? @default("down")
+  email       String? @unique
   password    String?
   phoneNumber String?
-  deleted     Boolean  @default(false)
-  createdAt   DateTime @default(now())
+
+  Orders Orders[]
+
+  deleted   Boolean  @default(false)
+  createdAt DateTime @default(now())
 }
 
-// Item
+model Orders {
+  id       String  @id @default(uuid())
+  WaiterId Int
+  Waiter   Waiters @relation(fields: [WaiterId], references: [id])
+
+  OrderItems  OrderItem[]
+  OrderStatus String?     @default("pending")
+  TableNumber String?     @default("")
+
+  createdAt DateTime @default(now())
+}
+
+model OrderItem {
+  id        Int      @id @default(autoincrement())
+  OrderId   String
+  ItemId    Int
+  quantity  Int      @default(1) // Allows storing repeated items
+  createdAt DateTime @default(now())
+
+  Order Orders @relation(fields: [OrderId], references: [id])
+  Item  Item   @relation(fields: [ItemId], references: [id])
+}
+
 // id
-// name
-// type
-// price
-// duration
+// L-waiter
+// L-item[]
+// totalPrice
+// vat
+// date
 // status
+// table
