@@ -38,13 +38,14 @@ model Waiters {
 }
 
 model Orders {
-  id       String  @id @default(uuid())
-  WaiterId Int
-  Waiter   Waiters @relation(fields: [WaiterId], references: [id])
-
-  OrderItems  OrderItem[]
-  OrderStatus String?     @default("pending")
-  TableNumber String?     @default("")
+  id                 String      @id @default(uuid())
+  WaiterId           Int
+  Waiter             Waiters     @relation(fields: [WaiterId], references: [id])
+  SpecialDescription String?
+  OrderItems         OrderItem[]
+  OrderStatus        String?     @default("pending")
+  TableNumber        String?     @default("")
+  Seen               String      @default("false")
 
   createdAt DateTime @default(now())
 }

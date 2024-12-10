@@ -41,17 +41,77 @@ router.get("/", async (req, res, next) => {
 });
 
 
+router.get("/pending", async (req, res, next) => {
+    console.log("Get Waiters requested:")
+    try {
+      const Orders = await prisma.Orders.findMany({
+        orderBy: {
+          createdAt: 'desc', // Sort by createdAt in descending order
+        },
+        where:{
+            OrderStatus :"pending" 
+        },
+          include: {
+              // Include the related waiter details
+              Waiter: true,  // This will include the entire waiter data (you can also specify specific fields)
+      
+              // Include the related items for each order
+              OrderItems: {
+                include: {
+                  Item: true,  // This will include the item details (e.g., name, price, etc.)
+                },
+              },
+            },
+  
+      });
+      res.json(Orders);
+    } catch (error) {
+      next(error);
+    }
+  });
 
-router.get("/history_for_waiter", authenticateToken, async (req, res, next) => {
 
-if(req.user.id){
+  router.get("/new", async (req, res, next) => {
+    console.log("Get Waiters requested:")
+    try {
+      const Orders = await prisma.Orders.findMany({
+        orderBy: {
+          createdAt: 'desc', // Sort by createdAt in descending order
+        },
+        where:{
+            OrderStatus :"pending" , Seen:"false"
+        },
+          include: {
+              // Include the related waiter details
+              Waiter: true,  // This will include the entire waiter data (you can also specify specific fields)
+      
+              // Include the related items for each order
+              OrderItems: {
+                include: {
+                  Item: true,  // This will include the item details (e.g., name, price, etc.)
+                },
+              },
+            },
+  
+      });
+      res.json(Orders);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+
+
+router.get("/history_for_waiter_by_id", async (req, res, next) => {
+
+if(req.body.waiter_id){
   
   console.log("Get Waiters requested:")
   try {
 
     const UserDetails = await prisma.Waiters.findUnique({
  
-      where: { id: req.user.id },
+      where: { id: req.body.waiter_id },
      
     });
 
@@ -94,16 +154,6 @@ router.get("/:id", async (req, res, next) => {
     const Orders = await prisma.Orders.findUnique({
       where: {
         id:req.params.id,
-      }, include: {
-        // Include the related waiter details
-        Waiter: true,  // This will include the entire waiter data (you can also specify specific fields)
-
-        // Include the related items for each order
-        OrderItems: {
-          include: {
-            Item: true,  // This will include the item details (e.g., name, price, etc.)
-          },
-        },
       },
     });
     res.json(Orders);
@@ -165,24 +215,25 @@ const WaiterId = WaiterDetails.id;
 
 
 //Update Student
-// router.patch("/:id",  async (req, res, next) => {
+router.patch("/:id",  async (req, res, next) => {
   
-   
-//       try {
-//         const { id } = req.params;
-//         const Waiters = await prisma.Waiters.update({
-//           where: {
-//             id: parseInt(req.params.id),
-//           },
-//           data: req.body,
-//         });
-//         res.json(Waiters);
-//       } catch (error) {
-//         next(error);
-//       }
+   console.log("Req: "+ JSON.stringify(req.body))
+   console.log("ID: "+ req.params.id)
+      try {
+        const { id } = req.params;
+        const Orders = await prisma.Orders.update({
+          where: {
+            id: req.params.id,
+          },
+          data: req.body,
+        });
+        res.json(Orders);
+      } catch (error) {
+        next(error);
+      }
     
   
-// });
+});
 
 //delete Student
 // router.delete("/:id",  async (req, res, next) => {

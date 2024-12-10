@@ -66,6 +66,10 @@ app.get('/', async (req, res) => {
 
 
   app.use("/waiters", require("./routes/waiters.route"));
+  app.use("/finance_info", require("./routes/finance_info.route"));
+  app.use("/kitchen_info", require("./routes/kitchen_info.route"));
+
+
 
   app.use("/items", require("./routes/items.route"));
   app.use("/login_waiter", require("./routes/authentication/login_waiter"))
