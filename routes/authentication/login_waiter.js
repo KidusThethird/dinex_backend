@@ -52,12 +52,16 @@ router.get("/profile", authenticateToken, async (req, res, next) => {
 
 router.post('/login', async (req, res) => {
     console.log("Login started")
+
+    console.log("Waiter Body: "+ JSON.stringify(req.body))
+    console.log("e: "+ req.body.email)
     try {
 
         //authentication started
       const Waiter = await prisma.Waiters.findFirst({
         where: {
           email: req.body.email,
+       // email: "dani@gmail.com"
         },
       });
       

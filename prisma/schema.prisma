@@ -8,17 +8,58 @@ generator client {
 }
 
 model Item {
-  id          Int         @id @default(autoincrement())
+  id                          Int                      @id @default(autoincrement())
+  name                        String?
+  description                 String?
+  type                        String?
+  itemType                    String?
+  price                       Float?
+  duration                    Float?
+  status                      String?
+  deleted                     Boolean                  @default(false)
+  createdAt                   DateTime                 @default(now())
+  inventoryItemsInventoryNeed foodItemsInventoryNeed[]
+  OrderItems                  OrderItem[]
+}
+
+model InventoryItems {
+  id          Int     @id @default(autoincrement())
   name        String?
   description String?
   type        String?
-  itemType    String?
-  price       Float?
-  duration    Float?
+  price       String?
+  quantity    String?
   status      String?
-  deleted     Boolean     @default(false)
-  createdAt   DateTime    @default(now())
-  OrderItems  OrderItem[]
+  measuredIn  String?
+
+  foodItemsInventoryNeed foodItemsInventoryNeed[]
+  deleted                Boolean                  @default(false)
+  createdAt              DateTime                 @default(now())
+}
+
+model InventoryPurchase {
+  id         Int      @id @default(autoincrement())
+  name       String?
+  amount     String?
+  price      String?
+  totalPrice String?
+  // supplier    String?
+  // status      String?
+  deleted    Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
+
+//this is the model for the food items that are needed in the inventory
+model foodItemsInventoryNeed {
+  id              Int            @id @default(autoincrement())
+  foodItem        Item           @relation(fields: [foodItemId], references: [id])
+  foodItemId      Int
+  inventoryItem   InventoryItems @relation(fields: [inventoryItemId], references: [id])
+  inventoryItemId Int
+  quantity        Float
+
+  deleted   Boolean  @default(false)
+  createdAt DateTime @default(now())
 }
 
 model Waiters {
